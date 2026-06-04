@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Project Fundraising — Evans Githinji Mwai</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8C97A;
+    --gold-dim: #8C7035;
+    --bg: #0D0D0D;
+    --surface: #161616;
+    --surface2: #1E1E1E;
+    --border: rgba(201,168,76,0.2);
+    --border-subtle: rgba(255,255,255,0.07);
+    --text: #F0EDE6;
+    --muted: #9A9589;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.7;
+  }
+
+  /* ── HEADER ── */
+  .custom-header {
+    padding: 3rem 3rem 2rem;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    background:
+      linear-gradient(rgba(13,13,13,0.82), rgba(13,13,13,0.97)),
+      url('istockphoto-1359352103-612x612.jpg') center 30% / cover no-repeat;
+  }
+  .header-eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+  }
+  .custom-header h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 600;
+    line-height: 1.1;
+    color: var(--text);
+  }
+  .custom-header h1 em { font-style: italic; color: var(--gold-light); }
+
+  /* ── MAIN GRID ── */
+  .main-grid {
+    display: flex;
+    flex-wrap: wrap;
+    min-height: calc(100vh - 200px);
+  }
+
+  .content-area {
+    flex: 1;
+    min-width: 350px;
+    padding: 2.5rem 3rem;
+    border-right: 1px solid var(--border-subtle);
+  }
+
+  .sidebar-area {
+    width: 380px;
+    min-width: 320px;
+    padding: 2.5rem 2.5rem;
+    background: var(--surface);
+  }
+
+  /* ── CONTENT ── */
+  .tagline {
+    font-size: 1.05rem;
+    color: var(--muted);
+    font-weight: 300;
+    max-width: 600px;
+    margin-bottom: 2.5rem;
+    line-height: 1.8;
+  }
+
+  .details-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2rem;
+    margin-bottom: 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .details-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, var(--gold), var(--gold-dim));
+  }
+
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    font-weight: 500;
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border-subtle);
+  }
+
+  .details-grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.65rem 1.75rem;
+  }
+  .detail-key {
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 500;
+    white-space: nowrap;
+    padding-top: 2px;
+  }
+  .detail-val { font-size: 0.97rem; color: var(--text); }
+
+  /* ── PROJECT TEXT ── */
+  .content-area h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.7rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.35rem;
+    margin-top: 2rem;
+  }
+  .content-area h3 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.35rem;
+    margin-top: 1.5rem;
+  }
+  .content-area p {
+    font-size: 0.95rem;
+    color: var(--muted);
+    line-height: 1.85;
+    font-weight: 300;
+    margin-bottom: 1rem;
+  }
+  .content-area ul, .content-area ol {
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.85;
+    font-weight: 300;
+    padding-left: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .content-area strong { color: var(--text); font-weight: 500; }
+
+  .underline-deco {
+    width: 50px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--gold), transparent);
+    margin-bottom: 1.25rem;
+  }
+
+  /* ── TOGGLE ── */
+  .more-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  .more-toggle:hover { color: var(--gold-light); }
+
+  .extra-content {
+    display: none;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-subtle);
+  }
+  .extra-content.visible { display: block; }
+
+  /* ── SIDEBAR ── */
+  .aside-label {
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    font-weight: 500;
+    margin-bottom: 0.4rem;
+  }
+  .aside-heading {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 0.4rem;
+  }
+  .aside-sub {
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 300;
+    margin-bottom: 1.75rem;
+    line-height: 1.6;
+  }
+  .aside-divider { height: 1px; background: var(--border-subtle); margin: 1.5rem 0; }
+
+  /* ── QUICK AMOUNTS ── */
+  .amounts-label {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.75rem;
+  }
+  .amounts-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 0.5rem;
+  }
+  .amt-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border-subtle);
+    color: var(--text);
+    padding: 0.6rem 0.4rem;
+    border-radius: 4px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.18s;
+  }
+  .amt-btn:hover, .amt-btn.active {
+    background: rgba(201,168,76,0.12);
+    border-color: var(--gold-dim);
+    color: var(--gold-light);
+  }
+
+  /* ── INPUTS ── */
+  .field { margin-bottom: 1rem; }
+  .field label {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+  }
+  .field input {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border-subtle);
+    color: var(--text);
+    padding: 0.75rem 1rem;
+    border-radius: 4px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .field input:focus { border-color: var(--gold-dim); }
+  .field input::placeholder { color: #555; }
+
+  /* ── DONATE BUTTON ── */
+  .donate-btn {
+    width: 100%;
+    background: var(--gold);
+    color: #0D0D0D;
+    border: none;
+    padding: 1rem;
+    border-radius: 4px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .donate-btn:hover:not(:disabled) { background: var(--gold-light); transform: translateY(-2px); }
+  .donate-btn:active:not(:disabled) { transform: scale(0.99); }
+  .donate-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+  .spinner {
+    width: 16px; height: 16px;
+    border: 2px solid rgba(0,0,0,0.25);
+    border-top-color: #0D0D0D;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    display: none;
+    flex-shrink: 0;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── FEEDBACK ── */
+  .feedback {
+    margin-top: 1rem;
+    font-size: 13px;
+    padding: 0.8rem 1rem;
+    border-radius: 4px;
+    display: none;
+    line-height: 1.55;
+  }
+  .feedback.success {
+    display: block;
+    background: rgba(60,130,80,0.15);
+    border: 1px solid rgba(60,130,80,0.3);
+    color: #82C896;
+  }
+  .feedback.error {
+    display: block;
+    background: rgba(192,84,74,0.12);
+    border: 1px solid rgba(192,84,74,0.3);
+    color: #E8887E;
+  }
+  .feedback.info {
+    display: block;
+    background: rgba(201,168,76,0.08);
+    border: 1px solid rgba(201,168,76,0.2);
+    color: var(--gold-light);
+  }
+
+  .aside-note {
+    margin-top: 2rem;
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* ── FOOTER ── */
+  .custom-footer {
+    padding: 1.5rem 3rem;
+    border-top: 1px solid var(--border-subtle);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--bg);
+  }
+  .footer-name { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold-dim); }
+  .footer-contact { font-size: 12px; color: var(--muted); }
+
+  /* ── MOBILE ── */
+  @media (max-width: 768px) {
+    .custom-header { padding: 2rem 1.5rem; }
+    .content-area { padding: 2rem 1.5rem; border-right: none; }
+    .sidebar-area { width: 100%; border-top: 1px solid var(--border-subtle); }
+    .custom-footer { flex-direction: column; gap: 0.5rem; text-align: center; padding: 1.25rem 1.5rem; }
+    .amounts-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<script>
+  // ╔════════════════════════════════════════════════════════════════╗
+  // ║  BACKEND URL                                                   ║
+  // ║  Points to localhost:3000 by default for local development.   ║
+  // ║  If hosted, it uses the current window origin.                ║
+  // ╚════════════════════════════════════════════════════════════════╝
+  const BACKEND_URL = window.location.hostname === 'localhost' || window.location.protocol === 'file:' 
+    ? "http://localhost:3000" 
+    : window.location.origin;
+</script>
+
+<!-- HEADER -->
+<div class="custom-header">
+  <div class="header-eyebrow">Fundraising Initiative</div>
+  <h1>Project <em>Fundraising</em></h1>
+</div>
+
+<!-- MAIN GRID -->
+<div class="main-grid">
+
+  <!-- LEFT: CONTENT -->
+  <div class="content-area">
+
+    <p class="tagline">
+      Your generous support helps bring this project to life.
+      Every contribution, regardless of size, carries this work forward.
+    </p>
+
+    <!-- Details Card -->
+    <div class="details-card">
+      <div class="section-label">The Candidate</div>
+      <div class="details-grid">
+        <span class="detail-key">Name</span>
+        <span class="detail-val">Evans Githinji Mwai</span>
+        <span class="detail-key">Institution</span>
+        <span class="detail-val">Mount Kenya University</span>
+        <span class="detail-key">Course</span>
+        <span class="detail-val">Electrical and Electronic Engineering</span>
+        <span class="detail-key">Unit</span>
+        <span class="detail-val">Final Year Project</span>
+      </div>
+    </div>
+
+    <h2>About the Project</h2>
+    <div class="underline-deco"></div>
+
+    <!-- intro section rendered from info.md -->
+    <div id="intro-content"></div>
+
+    <button class="more-toggle" id="toggleBtn" onclick="toggleMore()">
+      <span id="toggleLabel">▼ More about this project</span>
+    </button>
+
+    <div class="extra-content" id="extraContent">
+      <div id="more-content"></div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT: DONATION SIDEBAR -->
+  <div class="sidebar-area">
+
+    <div class="aside-label">Support this work</div>
+    <div class="aside-heading">Make a Donation</div>
+    <p class="aside-sub">Contribute via M-Pesa. An mpesa to prompt will be sent to your phone.</p>
+
+    <div class="amounts-label">Quick amounts</div>
+    <div class="amounts-grid">
+      <button class="amt-btn" onclick="selectAmt(50,  this)">KSh 50</button>
+      <button class="amt-btn" onclick="selectAmt(100, this)">KSh 100</button>
+      <button class="amt-btn" onclick="selectAmt(200, this)">KSh 200</button>
+      <button class="amt-btn" onclick="selectAmt(300, this)">KSh 300</button>
+      <button class="amt-btn" onclick="selectAmt(500, this)">KSh 500</button>
+      <button class="amt-btn" onclick="selectAmt(1000,this)">KSh 1,000</button>
+    </div>
+
+    <div class="aside-divider"></div>
+
+    <div class="field">
+      <label>Amount (KSh)</label>
+      <input type="number" id="amountInput" placeholder="Enter amount" min="1" step="50"/>
+    </div>
+    <div class="field">
+      <label>M-Pesa Number</label>
+      <input type="text" id="phoneInput" placeholder="07XX XXX XXX" maxlength="13"/>
+    </div>
+
+    <button class="donate-btn" id="donateBtn" onclick="donate()">
+      <span class="spinner" id="spinner"></span>
+      <span id="btnLabel">DONATE VIA M-PESA</span>
+    </button>
+
+    <div class="feedback" id="feedback"></div>
+
+    <p class="aside-note">
+      All contributions go directly toward project materials and expenses.
+      Thank you for believing in this work.
+    </p>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="custom-footer">
+  <span class="footer-name">Evans Githinji Mwai</span>
+  <span class="footer-contact">0724 862 896</span>
+</div>
+
+<script>
+  /* ── SIMPLE MARKDOWN RENDERER ─────────────────── */
+  function renderMarkdown(md) {
+    const lines = md.split('\n');
+    let html = '';
+    let inList = false;
+
+    for (let line of lines) {
+      if (/^### (.+)/.test(line)) {
+        if (inList) { html += '</ul>'; inList = false; }
+        html += `<h3>${line.replace(/^### /, '')}</h3><div class="underline-deco"></div>`;
+      } else if (/^## (.+)/.test(line)) {
+        if (inList) { html += '</ul>'; inList = false; }
+        html += `<h2>${line.replace(/^## /, '')}</h2><div class="underline-deco"></div>`;
+      } else if (/^# (.+)/.test(line)) {
+        if (inList) { html += '</ul>'; inList = false; }
+        html += `<h2>${line.replace(/^# /, '')}</h2><div class="underline-deco"></div>`;
+      } else if (/^- (.+)/.test(line)) {
+        if (!inList) { html += '<ul>'; inList = true; }
+        html += `<li>${inline(line.replace(/^- /, ''))}</li>`;
+      } else if (line.trim() === '') {
+        if (inList) { html += '</ul>'; inList = false; }
+      } else {
+        if (inList) { html += '</ul>'; inList = false; }
+        html += `<p>${inline(line)}</p>`;
+      }
+    }
+    if (inList) html += '</ul>';
+    return html;
+  }
+
+  function inline(text) {
+    return text
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.+?)\*/g, '<em>$1</em>')
+      .replace(/`(.+?)`/g, '<code>$1</code>');
+  }
+
+  /* ── LOAD info.md ─────────────────────────────── */
+  async function loadContent() {
+    let text = '';
+    try {
+      const res = await fetch('./info.md');
+      if (res.ok) text = await res.text();
+      else throw new Error();
+    } catch {
+      text = FALLBACK_CONTENT;
+    }
+
+    // Split the same way ui.py does
+    const splitIndex = text.indexOf('## Justification');
+    const intro = splitIndex !== -1 ? text.slice(0, splitIndex) : text;
+    const more  = splitIndex !== -1 ? text.slice(splitIndex) : '';
+
+    document.getElementById('intro-content').innerHTML = renderMarkdown(intro);
+
+    if (more) {
+      document.getElementById('more-content').innerHTML = renderMarkdown(more);
+    } else {
+      document.getElementById('toggleBtn').style.display = 'none';
+    }
+  }
+
+  /* ── FALLBACK (paste your info.md here) ─────────
+     This is used when info.md can't be fetched.
+     Replace this with your actual project content.
+  ─────────────────────────────────────────────── */
+  const FALLBACK_CONTENT = `# Microcontroller-based Egg Incubator
+
+## Introduction
+
+This project involves the design and development of a microcontroller-based egg incubator
+aimed at automating the hatching process for poultry eggs. The system maintains optimal
+temperature and humidity levels required for successful egg incubation, reducing human
+intervention and improving hatch rates.
+
+## Justification of the Study
+
+Manual egg incubation is unreliable and labour-intensive. Fluctuations in temperature
+and humidity lead to poor hatch rates, resulting in economic losses for poultry farmers.
+This project addresses that gap by providing an affordable, automated solution built on
+widely available microcontroller hardware — making it accessible to smallholder farmers
+across rural Kenya.
+
+## Objectives
+
+- To design a temperature and humidity control system using a microcontroller
+- To automate egg turning at set intervals
+- To display real-time incubation parameters on an LCD screen
+- To build a cost-effective system accessible to small-scale poultry farmers
+
+## Technical Specifications
+
+- **Microcontroller**: Arduino Uno / ATmega328P
+- **Sensors**: DHT22 (temperature and humidity)
+- **Heating Element**: 60W incandescent bulb
+- **Egg Turner**: SG90 servo motor, timed rotation every 4 hours
+- **Display**: 16x2 LCD with I2C module
+- **Power Supply**: 12V DC regulated
+`;
+
+  loadContent();
+
+  /* ── TOGGLE ── */
+  function toggleMore() {
+    const content = document.getElementById('extraContent');
+    const label   = document.getElementById('toggleLabel');
+    const isOpen  = content.classList.contains('visible');
+    content.classList.toggle('visible', !isOpen);
+    label.textContent = isOpen ? '▼ More about this project' : '▲ Show less';
+  }
+
+  /* ── QUICK AMOUNTS ── */
+  function selectAmt(val, btn) {
+    document.querySelectorAll('.amt-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('amountInput').value = val;
+  }
+
+  /* ── DONATE ── */
+  async function donate() {
+    const amount  = parseInt(document.getElementById('amountInput').value) || 0;
+    const phone   = document.getElementById('phoneInput').value.trim();
+    const fb      = document.getElementById('feedback');
+    const btn     = document.getElementById('donateBtn');
+    const spinner = document.getElementById('spinner');
+    const lbl     = document.getElementById('btnLabel');
+
+    fb.className = 'feedback';
+
+    if (amount < 1) {
+      fb.className = 'feedback error';
+      fb.textContent = 'Please enter a valid donation amount.';
+      return;
+    }
+    if (!phone) {
+      fb.className = 'feedback error';
+      fb.textContent = 'Please enter your M-Pesa phone number.';
+      return;
+    }
+
+    btn.disabled = true;
+    spinner.style.display = 'block';
+    lbl.textContent = 'Sending request…';
+
+    try {
+      const res = await fetch(`${BACKEND_URL}/pay`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone, amount }),
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        fb.className = 'feedback info';
+        fb.textContent = '📱 Check your phone and enter your M-Pesa PIN to complete the donation.';
+      } else {
+        fb.className = 'feedback error';
+        fb.textContent = data.error || 'Something went wrong. Please try again.';
+      }
+    } catch {
+      fb.className = 'feedback error';
+      fb.textContent = 'Could not reach the server. Please check your connection and try again.';
+    } finally {
+      btn.disabled = false;
+      spinner.style.display = 'none';
+      lbl.textContent = 'DONATE VIA M-PESA';
+    }
+  }
+</script>
+</body>
+</html>

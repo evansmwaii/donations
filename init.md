@@ -1,0 +1,44 @@
+# Project Initialization Log
+
+## [2026-04-27]
+- Created `info.md` with project overview, technical specifications, and objectives for the "Microcontroller-based Egg Incubator" project.
+- Developed `ui.py`, a modern Streamlit-based donation website with M-Pesa integration placeholders and project detail rendering.
+- Fixed a typo in `ui.py` (`unsafe_allow_html` parameter).
+- Redesigned `ui.py` with a cleaner header, updated project title, and removed the hero image as requested.
+- Updated `info.md` to contain only the simplified "Details" section.
+- Simplified `ui.py` by removing the "About the Project" body section and updating the sidebar with the new school and course information.
+- Added "Name: Evans Mwai Githinji" to the details in `info.md` and the `ui.py` sidebar.
+- Restored the full project overview, technical specifications, and objectives to `info.md` and `ui.py`.
+- Removed redundant details from the main section of `info.md`.
+- Implemented a "More About Project" toggle button in `ui.py` to hide/show technical specifications and objectives while keeping the overview visible.
+- Reorganized the layout: Moved personal details to the main header section, moved the donation form to the sidebar, and moved "Justification of the Study" to be hidden behind the "More About Project" button.
+- Simplified title to "Project Fundraising", enlarged the subtitle text, and reformatted the personal details with a dedicated "Details" section while removing the blue info box.
+- Enlarged the font size for the "Details" items, updated the name to "Evans Githinji Mwai" (capitalized), and updated the footer text.
+- Changed the footer text to all caps: "THIS IS MADE BY EVANS GITHINJI MWAI".
+- Added phone number 0724862896 to the footer.
+- Set `istockphoto-1359352103-612x612.jpg` as the background for the main area only (excluding sidebar), with a "zoomed out" effect using `100% auto` sizing.
+- Restored the sidebar's default solid background.
+- Set the sidebar background to black and applied the background image to the main content area with a semi-transparent white overlay for readability.
+- Removed the background image and set both the main section and sidebar to a pure black background with white text for a high-contrast dark theme.
+- Reduced the top padding of the main container to move the heading and content closer to the top of the page.
+- Changed the button styles to white background with black text to match the site's monochrome theme.
+- Updated all buttons (including "More About Project") to be black with white text and a white border for a seamless dark theme look.
+- Implemented a major "Premium Redesign" based on a gold-on-dark HTML template, incorporating Playfair Display and DM Sans fonts.
+- Integrated `istockphoto-1359352103-612x612.jpg` as a hero background for the header.
+- Reorganized content into a clean two-column layout with a custom "Details" card and M-Pesa donation sidebar.
+- Minimized vertical gaps by adjusting the padding of the header, main content area, and sidebar.
+- Updated `server.js` to use `CustomerPayBillOnline` for M-Pesa transactions.
+- Verified `PartyB` matches `SHORTCODE` and `AccountReference` is correctly configured in `server.js`.
+- Successfully tested the backend `/pay` endpoint with a mock request, confirming the STK Push initiation logic is functional.
+- Connected the Streamlit frontend (`ui.py`) to the Node.js backend (`server.js`) using `httpx`, enabling real-time M-Pesa donation requests from the UI.
+- Updated donation buttons to 50, 100, 200, 300, 500, and 1000 KSh.
+- Changed the STK Push success message to "Prompt sent! Check your phone."
+- Removed balloons animation from `ui.py` for a cleaner UI.
+- Enhanced phone number validation in `server.js` to support `07XX` and `01XX` prefixes.
+- Reverted `server.js` and `ui.py` to remove the real-time polling and in-memory payment store, returning to simple STK Push initiation.
+- Increased font size for the details items and updated the layout to hide justification under the "More About Project" button.
+- Transitioned the frontend from Streamlit (`ui.py`) to a custom HTML/CSS/JS solution (`index.html`).
+- Updated `server.js` to serve `index.html` on the root route and provide access to static assets (`info.md`, images).
+- Changed the M-Pesa notification message in `index.html` to "mpesa to prompt will be sent to your phone."
+- Connected `index.html` to the backend by auto-detecting the host origin.
+- Removed `ui.py` as it is no longer in use.
