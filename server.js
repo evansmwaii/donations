@@ -14,7 +14,7 @@ const SHORTCODE       = process.env.SHORTCODE;       // Your Till/Paybill number
 const PASSKEY         = process.env.PASSKEY;          // From Daraja go-live email
 const CALLBACK_URL    = process.env.CALLBACK_URL;     // e.g. https://yourapp.onrender.com/callback
 
-const BASE_URL = "https://sandbox.safaricom.co.ke";
+const BASE_URL = "https://api.safaricom.co.ke";
 
 // ── HELPERS ─────────────────────────────────────────────────────────────────
 
@@ -103,7 +103,7 @@ app.post("/pay", async (req, res) => {
       BusinessShortCode: SHORTCODE,
       Password:          password,
       Timestamp:         timestamp,
-      TransactionType:   "CustomerPayBillOnline", 
+      TransactionType:   "CustomerPayBillOnline",
       Amount:            parsedAmount,
       PartyA:            normalized,
       PartyB:            SHORTCODE,
