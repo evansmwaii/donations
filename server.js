@@ -103,7 +103,7 @@ app.post("/pay", async (req, res) => {
       BusinessShortCode: SHORTCODE,
       Password:          password,
       Timestamp:         timestamp,
-      TransactionType:   "CustomerPayBillOnline",
+      TransactionType:   "CustomerBuyGoodsOnline", 
       Amount:            parsedAmount,
       PartyA:            normalized,
       PartyB:            SHORTCODE,
