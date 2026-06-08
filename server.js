@@ -10,7 +10,8 @@ app.use(cors());
 // ── CONFIG ──────────────────────────────────────────────────────────────────
 const CONSUMER_KEY    = process.env.CONSUMER_KEY;
 const CONSUMER_SECRET = process.env.CONSUMER_SECRET;
-const SHORTCODE       = process.env.SHORTCODE;       // Your Till/Paybill number
+const SHORTCODE       = process.env.SHORTCODE;       // Your Store Number (e.g., 7XXXXXX)
+const TILL_NUMBER     = process.env.TILL_NUMBER;     // 🛠️ FIX: Your actual Till Number (e.g., 5XXXXX)
 const PASSKEY         = process.env.PASSKEY;          // From Daraja go-live email
 const CALLBACK_URL    = process.env.CALLBACK_URL;     // e.g. https://yourapp.onrender.com/callback
 
@@ -99,14 +100,15 @@ app.post("/pay", async (req, res) => {
     const timestamp = getTimestamp();
     const password  = getPassword(timestamp);
 
+    // 🛠️ FIX: Separated BusinessShortCode (Store Number) and PartyB (Till Number)
     const payload = {
-      BusinessShortCode: SHORTCODE,
+      BusinessShortCode: SHORTCODE,                  // Keep Store Number here
       Password:          password,
       Timestamp:         timestamp,
       TransactionType:   "CustomerBuyGoodsOnline",
       Amount:            parsedAmount,
       PartyA:            normalized,
-      PartyB:            SHORTCODE,
+      PartyB:            TILL_NUMBER,                // 🛠️ FIX: Pass your actual Till Number here
       PhoneNumber:       normalized,
       CallBackURL:       CALLBACK_URL,
       AccountReference:  "Evans Fundraising",
