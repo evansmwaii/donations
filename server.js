@@ -58,7 +58,6 @@ async function getAccessToken() {
   return cachedToken;
 }
 
-// ── HELPERS ─────────────────────────────────────────────────────────────────
 function getTimestamp() {
   const now = new Date();
   const pad = (n) => String(n).padStart(2, "0");
@@ -77,9 +76,26 @@ function getPassword(timestamp) {
   return Buffer.from(raw).toString("base64");
 }
 
+// ── HELPERS ─────────────────────────────────────────────────────────────────
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+function isDatastoreError(d) {
+  return d?.fault?.faultstring === "Datastore Error" ||
+         d?.fault?.detail?.errorcode === "Internal Server Error";
+}
+
+function isInvalidToken(d) {
+  return d?.errorCode === "404.001.03" ||
+         d?.errorMessage === "Invalid Access Token";
+}
+
 // ── STK PUSH with retry ──────────────────────────────────────────────────────
-// If we get an Invalid Access Token error, clear the cache and retry once.
+// Retry strategy:
+//   • Invalid token  → clear cache, retry immediately (once)
+//   • Datastore Error → wait 2s then retry (up to 3 total attempts)
 async function doStkPush(phone, amount, attempt = 1) {
+  const MAX_ATTEMPTS = 3;
+
   const token     = await getAccessToken();
   const timestamp = getTimestamp();
   const password  = getPassword(timestamp);
@@ -98,7 +114,7 @@ async function doStkPush(phone, amount, attempt = 1) {
     TransactionDesc:   "Donation for Final Year Project",
   };
 
-  console.log(`📤 STK Push attempt ${attempt}:`, JSON.stringify(payload, null, 2));
+  console.log(`📤 STK Push attempt ${attempt}/${MAX_ATTEMPTS}:`, JSON.stringify(payload, null, 2));
 
   const stkRes = await fetch(`${BASE_URL}/mpesa/stkpush/v1/processrequest`, {
     method: "POST",
@@ -112,15 +128,20 @@ async function doStkPush(phone, amount, attempt = 1) {
   const stkData = await stkRes.json();
   console.log(`📥 STK Response (attempt ${attempt}):`, JSON.stringify(stkData, null, 2));
 
-  // If token was rejected and this is our first attempt, clear cache and retry
-  if (
-    attempt === 1 &&
-    (stkData.errorCode === "404.001.03" || stkData.errorMessage === "Invalid Access Token")
-  ) {
-    console.log("⚠️  Invalid token detected — clearing cache and retrying...");
+  // ── Retry: Invalid token — clear cache and retry immediately
+  if (isInvalidToken(stkData) && attempt < MAX_ATTEMPTS) {
+    console.log("⚠️  Invalid token — clearing cache and retrying immediately...");
     cachedToken    = null;
     tokenExpiresAt = 0;
-    return doStkPush(phone, amount, 2);
+    return doStkPush(phone, amount, attempt + 1);
+  }
+
+  // ── Retry: Safaricom Datastore Error — wait 2s then retry
+  if (isDatastoreError(stkData) && attempt < MAX_ATTEMPTS) {
+    const delay = attempt * 2000; // 2s, then 4s
+    console.log(`⚠️  Safaricom Datastore Error — waiting ${delay}ms then retrying...`);
+    await sleep(delay);
+    return doStkPush(phone, amount, attempt + 1);
   }
 
   return stkData;
