@@ -10,28 +10,34 @@ app.use(cors());
 // ── CONFIG ──────────────────────────────────────────────────────────────────
 const CONSUMER_KEY    = process.env.CONSUMER_KEY;
 const CONSUMER_SECRET = process.env.CONSUMER_SECRET;
-const SHORTCODE       = process.env.SHORTCODE;       // Your Store Number (e.g., 7XXXXXX)
-const TILL_NUMBER     = process.env.TILL_NUMBER;     // 🛠️ FIX: Your actual Till Number (e.g., 5XXXXX)
-const PASSKEY         = process.env.PASSKEY;          // From Daraja go-live email
-const CALLBACK_URL    = process.env.CALLBACK_URL;     // e.g. https://yourapp.onrender.com/callback
+const SHORTCODE       = process.env.SHORTCODE;    // Store Number: 9084674
+const TILL_NUMBER     = process.env.TILL_NUMBER;  // Till Number:  5961013
+const PASSKEY         = process.env.PASSKEY;      // From Daraja go-live email
+const CALLBACK_URL    = process.env.CALLBACK_URL; // e.g. https://yourapp.onrender.com/callback
 
+// ✅ FIX 1: Production URL (not sandbox)
 const BASE_URL = "https://api.safaricom.co.ke";
 
 // ── HELPERS ─────────────────────────────────────────────────────────────────
 
-// Step 1: Get OAuth access token from Safaricom
+// Get OAuth access token from Safaricom
 async function getAccessToken() {
   const credentials = Buffer.from(`${CONSUMER_KEY}:${CONSUMER_SECRET}`).toString("base64");
   const res = await fetch(`${BASE_URL}/oauth/v1/generate?grant_type=client_credentials`, {
     method: "GET",
     headers: { Authorization: `Basic ${credentials}` },
   });
-  if (!res.ok) throw new Error("Failed to get access token");
+
+  if (!res.ok) {
+    const errText = await res.text();
+    throw new Error(`Failed to get access token: ${errText}`);
+  }
+
   const data = await res.json();
   return data.access_token;
 }
 
-// Step 2: Generate timestamp (YYYYMMDDHHmmss)
+// Generate timestamp: YYYYMMDDHHmmss
 function getTimestamp() {
   const now = new Date();
   const pad = (n) => String(n).padStart(2, "0");
@@ -45,7 +51,8 @@ function getTimestamp() {
   );
 }
 
-// Step 3: Generate password (Base64 of Shortcode + Passkey + Timestamp)
+// Generate password: Base64(Shortcode + Passkey + Timestamp)
+// For Buy Goods, Shortcode here is your STORE NUMBER (9084674)
 function getPassword(timestamp) {
   const raw = `${SHORTCODE}${PASSKEY}${timestamp}`;
   return Buffer.from(raw).toString("base64");
@@ -58,34 +65,30 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
 });
 
-// Serve info.md for the frontend to fetch
+// Serve info.md
 app.get("/info.md", (req, res) => {
   res.sendFile(path.join(__dirname, "info.md"));
 });
 
-// Serve the background image
+// Serve background image
 app.get("/istockphoto-1359352103-612x612.jpg", (req, res) => {
   res.sendFile(path.join(__dirname, "istockphoto-1359352103-612x612.jpg"));
 });
 
-// Initiate STK Push
+// ── STK PUSH ─────────────────────────────────────────────────────────────────
 app.post("/pay", async (req, res) => {
   try {
     const { phone, amount } = req.body;
 
-    // Basic validation
+    // Validate inputs
     if (!phone || !amount) {
       return res.status(400).json({ error: "Phone number and amount are required." });
     }
 
-    // Normalize phone: handle 07XX, 01XX, 2547XX, 2541XX, +2547XX, +2541XX
+    // Normalize Kenyan phone: 07XX / 01XX / +2547XX / 2547XX → 2547XXXXXXXX
     let normalized = String(phone).replace(/\s+/g, "");
-    if (normalized.startsWith("+")) {
-      normalized = normalized.slice(1);
-    }
-    if (normalized.startsWith("0")) {
-      normalized = "254" + normalized.slice(1);
-    }
+    if (normalized.startsWith("+")) normalized = normalized.slice(1);
+    if (normalized.startsWith("0"))  normalized = "254" + normalized.slice(1);
     if (!/^254(7|1)\d{8}$/.test(normalized)) {
       return res.status(400).json({ error: "Invalid Kenyan phone number." });
     }
@@ -95,25 +98,26 @@ app.post("/pay", async (req, res) => {
       return res.status(400).json({ error: "Invalid amount." });
     }
 
-    // Get token and build request
+    // Build STK Push request
     const token     = await getAccessToken();
     const timestamp = getTimestamp();
     const password  = getPassword(timestamp);
 
-    // 🛠️ FIX: Separated BusinessShortCode (Store Number) and PartyB (Till Number)
     const payload = {
-      BusinessShortCode: SHORTCODE,                  // Keep Store Number here
+      BusinessShortCode: SHORTCODE,              // Store Number (9084674) — used for password & routing
       Password:          password,
       Timestamp:         timestamp,
-      TransactionType:   "CustomerBuyGoodsOnline",
+      TransactionType:   "CustomerBuyGoodsOnline", // ✅ FIX 2: correct type for Buy Goods / Till
       Amount:            parsedAmount,
-      PartyA:            normalized,
-      PartyB:            TILL_NUMBER,                // 🛠️ FIX: Pass your actual Till Number here
-      PhoneNumber:       normalized,
+      PartyA:            normalized,             // Customer's phone
+      PartyB:            TILL_NUMBER,            // ✅ FIX 3: Till Number (5961013) receives the money
+      PhoneNumber:       normalized,             // Phone that gets the STK prompt
       CallBackURL:       CALLBACK_URL,
       AccountReference:  "Evans Fundraising",
       TransactionDesc:   "Donation for Final Year Project",
     };
+
+    console.log("📤 STK Push payload:", JSON.stringify(payload, null, 2));
 
     const stkRes = await fetch(`${BASE_URL}/mpesa/stkpush/v1/processrequest`, {
       method: "POST",
@@ -125,49 +129,58 @@ app.post("/pay", async (req, res) => {
     });
 
     const stkData = await stkRes.json();
+    console.log("📥 STK Push response:", JSON.stringify(stkData, null, 2));
 
     if (stkData.ResponseCode === "0") {
-      res.json({
+      return res.json({
         success: true,
         message: "STK Push sent. Check your phone to complete the payment.",
         checkoutRequestId: stkData.CheckoutRequestID,
       });
     } else {
-      res.status(400).json({
+      return res.status(400).json({
         success: false,
-        error: stkData.errorMessage || "STK Push failed. Try again.",
+        error: stkData.errorMessage || stkData.ResponseDescription || "STK Push failed. Try again.",
       });
     }
+
   } catch (err) {
-    console.error("Error:", err.message);
+    console.error("❌ /pay error:", err.message);
     res.status(500).json({ error: "Server error. Please try again." });
   }
 });
 
-// Safaricom callback — receives payment confirmation
+// ── CALLBACK ──────────────────────────────────────────────────────────────────
+// Safaricom posts payment result here after customer acts on STK prompt
 app.post("/callback", (req, res) => {
   const body = req.body;
-  console.log("M-Pesa Callback:", JSON.stringify(body, null, 2));
+  console.log("📲 M-Pesa Callback received:", JSON.stringify(body, null, 2));
 
   const result = body?.Body?.stkCallback;
+
   if (result?.ResultCode === 0) {
     const items = result.CallbackMetadata?.Item || [];
     const get   = (name) => items.find((i) => i.Name === name)?.Value;
-    console.log("✅ Payment received:", {
-      amount: get("Amount"),
+
+    console.log("✅ Payment successful:", {
+      amount:  get("Amount"),
       receipt: get("MpesaReceiptNumber"),
       phone:   get("PhoneNumber"),
+      date:    get("TransactionDate"),
     });
   } else {
     console.log("❌ Payment failed or cancelled:", result?.ResultDesc);
   }
 
-  // Always acknowledge Safaricom's callback
+  // Safaricom requires this acknowledgement — always respond with 200
   res.json({ ResultCode: 0, ResultDesc: "Accepted" });
 });
 
-// ── START ────────────────────────────────────────────────────────────────────
+// ── START ─────────────────────────────────────────────────────────────────────
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`✅ Server running on port ${PORT}`);
+  console.log(`   SHORTCODE (Store):  ${SHORTCODE}`);
+  console.log(`   TILL_NUMBER:        ${TILL_NUMBER}`);
+  console.log(`   CALLBACK_URL:       ${CALLBACK_URL}`);
 });
