@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Thank You — Evans Mwai</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --gold: #C9A84C; --gold2: #F0D080;
+      --dark: #0D0D0D; --card: #141414;
+      --text: #E8E0D0; --muted: #8A7F6E;
+    }
+
+    body {
+      background: var(--dark); color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh; display: flex;
+      align-items: center; justify-content: center;
+      overflow: hidden; position: relative;
+    }
+
+    /* ambient orbs */
+    body::before, body::after {
+      content: ''; position: fixed; border-radius: 50%;
+      filter: blur(120px); opacity: 0.15; pointer-events: none; z-index: 0;
+    }
+    body::before {
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, #C9A84C, transparent);
+      top: -120px; left: -120px;
+      animation: drift1 14s ease-in-out infinite alternate;
+    }
+    body::after {
+      width: 420px; height: 420px;
+      background: radial-gradient(circle, #3A6EA8, transparent);
+      bottom: -100px; right: -100px;
+      animation: drift2 16s ease-in-out infinite alternate;
+    }
+    @keyframes drift1 { to { transform: translate(70px, 90px); } }
+    @keyframes drift2 { to { transform: translate(-70px, -70px); } }
+
+    /* card */
+    .card {
+      position: relative; z-index: 1;
+      background: var(--card);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 32px;
+      padding: 52px 48px 44px;
+      max-width: 430px; width: 92%;
+      text-align: center;
+      box-shadow: 0 48px 130px rgba(0,0,0,0.75), inset 0 1px 0 rgba(255,255,255,0.04);
+      animation: rise 0.85s cubic-bezier(0.22,1,0.36,1) both;
+    }
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(44px) scale(0.95); }
+      to   { opacity: 1; transform: translateY(0)    scale(1); }
+    }
+
+    /* ── AVATAR ── */
+    .avatar-wrap {
+      position: relative; width: 116px; height: 116px; margin: 0 auto 28px;
+    }
+    /* spinning gold ring */
+    .avatar-ring {
+      position: absolute; inset: -5px; border-radius: 50%;
+      background: conic-gradient(var(--gold) 0%, var(--gold2) 35%, var(--gold) 65%, var(--gold2) 85%, var(--gold) 100%);
+      animation: spin 7s linear infinite;
+      z-index: 0;
+    }
+    /* gap between ring and photo */
+    .avatar-gap {
+      position: absolute; inset: 2px; border-radius: 50%;
+      background: var(--card); z-index: 1;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .avatar {
+      position: absolute; inset: 5px; border-radius: 50%;
+      object-fit: cover; object-position: top center;
+      z-index: 2;
+      /* placeholder bg while image loads */
+      background: #1e1e1e;
+    }
+
+    /* green check badge */
+    .check-badge {
+      position: absolute; bottom: 0; right: 0; z-index: 3;
+      width: 34px; height: 34px;
+      background: #2EAF6B;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      border: 3px solid var(--card);
+      animation: pop 0.5s 0.9s cubic-bezier(0.34,1.56,0.64,1) both;
+      box-shadow: 0 4px 12px rgba(46,175,107,0.4);
+    }
+    @keyframes pop { from { transform: scale(0); } to { transform: scale(1); } }
+    .check-badge svg { width: 15px; height: 15px; }
+
+    /* ── TEXT ── */
+    .eyebrow {
+      font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 10px; font-weight: 500;
+      animation: fadein 0.5s 0.25s both;
+    }
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.1rem; font-weight: 700; line-height: 1.15;
+      margin-bottom: 6px;
+      animation: fadein 0.5s 0.35s both;
+    }
+    h1 em { font-style: italic; color: var(--gold); }
+
+    .from-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.92rem; color: var(--muted);
+      margin-bottom: 24px;
+      animation: fadein 0.5s 0.4s both;
+    }
+
+    .divider {
+      width: 44px; height: 2px;
+      background: linear-gradient(90deg, var(--gold), var(--gold2), transparent);
+      margin: 0 auto 24px; border-radius: 2px;
+      animation: fadein 0.5s 0.45s both;
+    }
+
+    .message {
+      font-size: 0.95rem; line-height: 1.75; color: #B8AFA0;
+      margin-bottom: 26px;
+      animation: fadein 0.5s 0.5s both;
+    }
+    .message strong { color: var(--text); font-weight: 500; }
+
+    /* receipt pill */
+    .receipt-pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(46,175,107,0.08);
+      border: 1px solid rgba(46,175,107,0.22);
+      border-radius: 100px; padding: 9px 18px;
+      font-size: 0.8rem; color: #6FCF97;
+      letter-spacing: 0.04em; margin-bottom: 30px;
+      animation: fadein 0.5s 0.55s both;
+    }
+    .receipt-pill span { color: var(--muted); font-size: 0.76rem; }
+
+    /* signature */
+    .sig {
+      font-family: 'Playfair Display', serif;
+      font-style: italic; font-size: 1.25rem; color: var(--gold);
+      animation: fadein 0.5s 0.65s both;
+    }
+    .sig-sub {
+      font-size: 0.74rem; color: var(--muted);
+      margin-top: 5px; letter-spacing: 0.04em;
+      animation: fadein 0.5s 0.7s both;
+    }
+
+    /* teliko line at bottom */
+    .teliko-line {
+      margin-top: 28px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      font-size: 10px; letter-spacing: 0.18em;
+      text-transform: uppercase; color: rgba(201,168,76,0.4);
+      animation: fadein 0.5s 0.75s both;
+    }
+
+    @keyframes fadein {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* particles */
+    .particles { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .dot {
+      position: absolute; border-radius: 50%;
+      background: var(--gold); opacity: 0;
+      animation: floatup var(--dur) var(--delay) ease-in infinite;
+    }
+    @keyframes floatup {
+      0%   { opacity: 0; transform: translateY(0) scale(1); }
+      8%   { opacity: 0.55; }
+      92%  { opacity: 0.15; }
+      100% { opacity: 0; transform: translateY(-115vh) scale(0.3); }
+    }
+  </style>
+</head>
+<body>
+  <div class="particles" id="particles"></div>
+
+  <div class="card">
+
+    <!-- PROFILE PHOTO — replace src with your actual photo URL -->
+    <div class="avatar-wrap">
+      <div class="avatar-ring"></div>
+      <div class="avatar-gap"></div>
+      <!--
+        HOW TO ADD YOUR PHOTO:
+        Option A (easiest) — rename your WhatsApp photo to "profile.jpg",
+        add it to your repo root, then change the src below to: src="profile.jpg"
+
+        Option B — use the raw GitHub URL directly:
+        src="https://raw.githubusercontent.com/evansmwaii/donations/main/WhatsApp%20Image%202026-05-06%20at%2012.15.05.jpeg"
+
+        The onerror fallback shows your initials if the photo fails to load.
+      -->
+      <img
+        class="avatar"
+        src="WhatsApp Image 2026-05-06 at 12.15.05.jpeg"
+        alt="Evans Mwai"
+        onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=EM&background=C9A84C&color=0D0D0D&size=106&bold=true&font-size=0.45';"
+      />
+      <div class="check-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="eyebrow">With Gratitude</div>
+    <h1>Thank You,<br/><em>Truly.</em></h1>
+    <div class="from-name">— Evans Mwai</div>
+    <div class="divider"></div>
+
+    <p class="message">
+      Your donation goes directly toward building a
+      <strong>Microcontroller-Based Egg Incubator</strong>.
+      Every shilling brings this project closer to reality — thank you for believing in this work.
+    </p>
+
+    <div class="receipt-pill">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path d="M9 12l2 2 4-4"/>
+        <path d="M21 12c0 4.97-4.03 9-9 9S3 16.97 3 12 7.03 3 12 3s9 4.03 9 9z"/>
+      </svg>
+      Payment confirmed via M-Pesa
+      <span>· Secured by Safaricom</span>
+    </div>
+
+    <div class="sig">Evans Mwai</div>
+    <div class="sig-sub">Electrical &amp; Electronic Engineering &nbsp;·&nbsp; Final Year &nbsp;·&nbsp; 2026</div>
+
+    <div class="teliko-line">Teliko Technology</div>
+  </div>
+
+  <script>
+    // Floating gold particles
+    const container = document.getElementById('particles');
+    for (let i = 0; i < 32; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'dot';
+      const size = 1.5 + Math.random() * 3;
+      dot.style.cssText = `
+        left: ${Math.random() * 100}%;
+        bottom: -10px;
+        width: ${size}px;
+        height: ${size}px;
+        --dur: ${7 + Math.random() * 11}s;
+        --delay: ${Math.random() * 12}s;
+      `;
+      container.appendChild(dot);
+    }
+  </script>
+</body>
+</html>
