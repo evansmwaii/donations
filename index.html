@@ -57,6 +57,29 @@
   }
   .custom-header h1 em { font-style: italic; color: var(--gold-light); }
 
+  /* TELIKO badge in header */
+  .teliko-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 1rem;
+    background: rgba(201,168,76,0.08);
+    border: 1px solid rgba(201,168,76,0.22);
+    border-radius: 4px;
+    padding: 5px 12px;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    font-weight: 500;
+  }
+  .teliko-badge::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--gold);
+  }
+
   /* ── MAIN GRID ── */
   .main-grid {
     display: flex;
@@ -139,7 +162,6 @@
   }
   .detail-val { font-size: 0.97rem; color: var(--text); }
 
-  /* ── PROJECT TEXT ── */
   .content-area h2 {
     font-family: 'Playfair Display', Georgia, serif;
     font-size: 1.7rem;
@@ -180,7 +202,6 @@
     margin-bottom: 1.25rem;
   }
 
-  /* ── TOGGLE ── */
   .more-toggle {
     display: inline-flex;
     align-items: center;
@@ -199,13 +220,7 @@
     transition: color 0.2s;
   }
   .more-toggle:hover { color: var(--gold-light); }
-
-  .extra-content {
-    display: none;
-    margin-top: 1.5rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--border-subtle);
-  }
+  .extra-content { display: none; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-subtle); }
   .extra-content.visible { display: block; }
 
   /* ── SIDEBAR ── */
@@ -233,7 +248,6 @@
   }
   .aside-divider { height: 1px; background: var(--border-subtle); margin: 1.5rem 0; }
 
-  /* ── QUICK AMOUNTS ── */
   .amounts-label {
     font-size: 11px;
     letter-spacing: 0.15em;
@@ -265,7 +279,6 @@
     color: var(--gold-light);
   }
 
-  /* ── INPUTS ── */
   .field { margin-bottom: 1rem; }
   .field label {
     display: block;
@@ -290,7 +303,6 @@
   .field input:focus { border-color: var(--gold-dim); }
   .field input::placeholder { color: #555; }
 
-  /* ── DONATE BUTTON ── */
   .donate-btn {
     width: 100%;
     background: var(--gold);
@@ -326,7 +338,6 @@
   }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* ── FEEDBACK ── */
   .feedback {
     margin-top: 1rem;
     font-size: 13px;
@@ -335,27 +346,39 @@
     display: none;
     line-height: 1.55;
   }
-  .feedback.success {
-    display: block;
-    background: rgba(60,130,80,0.15);
-    border: 1px solid rgba(60,130,80,0.3);
-    color: #82C896;
+  .feedback.success { display: block; background: rgba(60,130,80,0.15); border: 1px solid rgba(60,130,80,0.3); color: #82C896; }
+  .feedback.error   { display: block; background: rgba(192,84,74,0.12); border: 1px solid rgba(192,84,74,0.3); color: #E8887E; }
+  .feedback.info    { display: block; background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.2); color: var(--gold-light); }
+
+  /* ── MANUAL FALLBACK BOX ── */
+  .manual-fallback {
+    margin-top: 1.25rem;
+    background: rgba(201,168,76,0.05);
+    border: 1px solid rgba(201,168,76,0.15);
+    border-radius: 6px;
+    padding: 1rem 1.1rem;
   }
-  .feedback.error {
-    display: block;
-    background: rgba(192,84,74,0.12);
-    border: 1px solid rgba(192,84,74,0.3);
-    color: #E8887E;
+  .manual-fallback .mf-label {
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold-dim);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
   }
-  .feedback.info {
-    display: block;
-    background: rgba(201,168,76,0.08);
-    border: 1px solid rgba(201,168,76,0.2);
-    color: var(--gold-light);
+  .manual-fallback .mf-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 4px;
   }
+  .mf-icon { font-size: 1rem; flex-shrink: 0; }
+  .mf-text { font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .mf-text strong { color: var(--gold-light); font-weight: 600; }
+  .mf-divider { height: 1px; background: var(--border-subtle); margin: 0.65rem 0; }
 
   .aside-note {
-    margin-top: 2rem;
+    margin-top: 1.5rem;
     font-size: 12px;
     color: var(--muted);
     line-height: 1.7;
@@ -372,14 +395,16 @@
     background: var(--bg);
   }
   .footer-name { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold-dim); }
-  .footer-contact { font-size: 12px; color: var(--muted); }
+  .footer-right { text-align: right; }
+  .footer-teliko { font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--gold); font-weight: 500; }
+  .footer-contact { font-size: 12px; color: var(--muted); margin-top: 2px; }
 
-  /* ── MOBILE ── */
   @media (max-width: 768px) {
     .custom-header { padding: 2rem 1.5rem; }
     .content-area { padding: 2rem 1.5rem; border-right: none; }
     .sidebar-area { width: 100%; border-top: 1px solid var(--border-subtle); }
     .custom-footer { flex-direction: column; gap: 0.5rem; text-align: center; padding: 1.25rem 1.5rem; }
+    .footer-right { text-align: center; }
     .amounts-grid { grid-template-columns: 1fr 1fr; }
   }
 </style>
@@ -387,13 +412,8 @@
 <body>
 
 <script>
-  // ╔════════════════════════════════════════════════════════════════╗
-  // ║  BACKEND URL                                                   ║
-  // ║  Points to localhost:3000 by default for local development.   ║
-  // ║  If hosted, it uses the current window origin.                ║
-  // ╚════════════════════════════════════════════════════════════════╝
-  const BACKEND_URL = window.location.hostname === 'localhost' || window.location.protocol === 'file:' 
-    ? "http://localhost:3000" 
+  const BACKEND_URL = window.location.hostname === 'localhost' || window.location.protocol === 'file:'
+    ? "http://localhost:3000"
     : window.location.origin;
 </script>
 
@@ -401,6 +421,7 @@
 <div class="custom-header">
   <div class="header-eyebrow">Fundraising Initiative</div>
   <h1>Project <em>Fundraising</em></h1>
+  <div class="teliko-badge">Teliko Technology</div>
 </div>
 
 <!-- MAIN GRID -->
@@ -408,13 +429,11 @@
 
   <!-- LEFT: CONTENT -->
   <div class="content-area">
-
     <p class="tagline">
       Your generous support helps bring this project to life.
       Every contribution, regardless of size, carries this work forward.
     </p>
 
-    <!-- Details Card -->
     <div class="details-card">
       <div class="section-label">The Candidate</div>
       <div class="details-grid">
@@ -431,26 +450,21 @@
 
     <h2>About the Project</h2>
     <div class="underline-deco"></div>
-
-    <!-- intro section rendered from info.md -->
     <div id="intro-content"></div>
 
     <button class="more-toggle" id="toggleBtn" onclick="toggleMore()">
       <span id="toggleLabel">▼ More about this project</span>
     </button>
-
     <div class="extra-content" id="extraContent">
       <div id="more-content"></div>
     </div>
-
   </div>
 
   <!-- RIGHT: DONATION SIDEBAR -->
   <div class="sidebar-area">
-
     <div class="aside-label">Support this work</div>
     <div class="aside-heading">Make a Donation</div>
-    <p class="aside-sub">Contribute via M-Pesa. An mpesa to prompt will be sent to your phone.</p>
+    <p class="aside-sub">Contribute via M-Pesa. A prompt will be sent directly to your phone.</p>
 
     <div class="amounts-label">Quick amounts</div>
     <div class="amounts-grid">
@@ -480,27 +494,44 @@
 
     <div class="feedback" id="feedback"></div>
 
+    <!-- MANUAL FALLBACK — always visible -->
+    <div class="manual-fallback">
+      <div class="mf-label">Prompt not arriving? Send manually</div>
+      <div class="mf-row">
+        <span class="mf-icon">📲</span>
+        <span class="mf-text">
+          Go to <strong>M-Pesa → Send Money</strong><br/>
+          Send to <strong>0724 862 896</strong>
+        </span>
+      </div>
+      <div class="mf-divider"></div>
+      <div class="mf-row">
+        <span class="mf-icon">💚</span>
+        <span class="mf-text">Any amount is deeply appreciated — thank you.</span>
+      </div>
+    </div>
+
     <p class="aside-note">
       All contributions go directly toward project materials and expenses.
       Thank you for believing in this work.
     </p>
-
   </div>
 </div>
 
 <!-- FOOTER -->
 <div class="custom-footer">
   <span class="footer-name">Evans Githinji Mwai</span>
-  <span class="footer-contact">0724 862 896</span>
+  <div class="footer-right">
+    <div class="footer-teliko">Teliko Technology</div>
+    <div class="footer-contact">0724 862 896</div>
+  </div>
 </div>
 
 <script>
-  /* ── SIMPLE MARKDOWN RENDERER ─────────────────── */
+  /* ── MARKDOWN RENDERER ── */
   function renderMarkdown(md) {
     const lines = md.split('\n');
-    let html = '';
-    let inList = false;
-
+    let html = '', inList = false;
     for (let line of lines) {
       if (/^### (.+)/.test(line)) {
         if (inList) { html += '</ul>'; inList = false; }
@@ -524,7 +555,6 @@
     if (inList) html += '</ul>';
     return html;
   }
-
   function inline(text) {
     return text
       .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
@@ -532,24 +562,17 @@
       .replace(/`(.+?)`/g, '<code>$1</code>');
   }
 
-  /* ── LOAD info.md ─────────────────────────────── */
+  /* ── LOAD info.md ── */
   async function loadContent() {
     let text = '';
     try {
       const res = await fetch('./info.md');
-      if (res.ok) text = await res.text();
-      else throw new Error();
-    } catch {
-      text = FALLBACK_CONTENT;
-    }
-
-    // Split the same way ui.py does
+      if (res.ok) text = await res.text(); else throw new Error();
+    } catch { text = FALLBACK_CONTENT; }
     const splitIndex = text.indexOf('## Justification');
     const intro = splitIndex !== -1 ? text.slice(0, splitIndex) : text;
     const more  = splitIndex !== -1 ? text.slice(splitIndex) : '';
-
     document.getElementById('intro-content').innerHTML = renderMarkdown(intro);
-
     if (more) {
       document.getElementById('more-content').innerHTML = renderMarkdown(more);
     } else {
@@ -557,10 +580,6 @@
     }
   }
 
-  /* ── FALLBACK (paste your info.md here) ─────────
-     This is used when info.md can't be fetched.
-     Replace this with your actual project content.
-  ─────────────────────────────────────────────── */
   const FALLBACK_CONTENT = `# Microcontroller-based Egg Incubator
 
 ## Introduction
@@ -575,29 +594,10 @@ intervention and improving hatch rates.
 Manual egg incubation is unreliable and labour-intensive. Fluctuations in temperature
 and humidity lead to poor hatch rates, resulting in economic losses for poultry farmers.
 This project addresses that gap by providing an affordable, automated solution built on
-widely available microcontroller hardware — making it accessible to smallholder farmers
-across rural Kenya.
-
-## Objectives
-
-- To design a temperature and humidity control system using a microcontroller
-- To automate egg turning at set intervals
-- To display real-time incubation parameters on an LCD screen
-- To build a cost-effective system accessible to small-scale poultry farmers
-
-## Technical Specifications
-
-- **Microcontroller**: Arduino Uno / ATmega328P
-- **Sensors**: DHT22 (temperature and humidity)
-- **Heating Element**: 60W incandescent bulb
-- **Egg Turner**: SG90 servo motor, timed rotation every 4 hours
-- **Display**: 16x2 LCD with I2C module
-- **Power Supply**: 12V DC regulated
+widely available microcontroller hardware.
 `;
-
   loadContent();
 
-  /* ── TOGGLE ── */
   function toggleMore() {
     const content = document.getElementById('extraContent');
     const label   = document.getElementById('toggleLabel');
@@ -606,14 +606,12 @@ across rural Kenya.
     label.textContent = isOpen ? '▼ More about this project' : '▲ Show less';
   }
 
-  /* ── QUICK AMOUNTS ── */
   function selectAmt(val, btn) {
     document.querySelectorAll('.amt-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     document.getElementById('amountInput').value = val;
   }
 
-  /* ── DONATE ── */
   async function donate() {
     const amount  = parseInt(document.getElementById('amountInput').value) || 0;
     const phone   = document.getElementById('phoneInput').value.trim();
@@ -652,11 +650,12 @@ across rural Kenya.
         fb.textContent = '📱 Check your phone and enter your M-Pesa PIN to complete the donation.';
       } else {
         fb.className = 'feedback error';
-        fb.textContent = data.error || 'Something went wrong. Please try again.';
+        fb.textContent = (data.error || 'Something went wrong. Please try again.')
+          + ' You can also send directly via M-Pesa Send Money to 0724 862 896.';
       }
     } catch {
       fb.className = 'feedback error';
-      fb.textContent = 'Could not reach the server. Please check your connection and try again.';
+      fb.textContent = 'Could not reach the server. Please send directly via M-Pesa Send Money to 0724 862 896.';
     } finally {
       btn.disabled = false;
       spinner.style.display = 'none';
