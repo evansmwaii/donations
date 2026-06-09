@@ -150,7 +150,7 @@ async function doStkPush(phone, amount, attempt = 1) {
 // ── ROUTES ───────────────────────────────────────────────────────────────────
 app.get("/", (req, res) => res.sendFile(path.join(__dirname, "index.html")));
 app.get("/info.md", (req, res) => res.sendFile(path.join(__dirname, "info.md")));
-app.get("/thankyou", (req, res) => res.sendFile(path.join(__dirname, "thankyou.html")));
+app.get("/thankyou", (req, res) => res.sendFile(path.join(__dirname, "Thankyou.html")));
 app.get("/istockphoto-1359352103-612x612.jpg", (req, res) =>
   res.sendFile(path.join(__dirname, "istockphoto-1359352103-612x612.jpg"))
 );
