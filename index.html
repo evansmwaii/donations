@@ -483,7 +483,7 @@
       <input type="number" id="amountInput" placeholder="Enter amount" min="1" step="50"/>
     </div>
     <div class="field">
-      <label>M-Pesa Number</label>
+      <label>Enter Your M-Pesa Number</label>
       <input type="text" id="phoneInput" placeholder="07XX XXX XXX" maxlength="13"/>
     </div>
 
@@ -648,6 +648,8 @@ widely available microcontroller hardware.
       if (data.success) {
         fb.className = 'feedback info';
         fb.textContent = '📱 Check your phone and enter your M-Pesa PIN to complete the donation.';
+        // Redirect to thank you page after user has time to read the message
+        setTimeout(() => { window.location.href = '/thankyou'; }, 4000);
       } else {
         fb.className = 'feedback error';
         fb.textContent = (data.error || 'Something went wrong. Please try again.')
