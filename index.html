@@ -496,12 +496,12 @@
 
     <!-- MANUAL FALLBACK — always visible -->
     <div class="manual-fallback">
-      <div class="mf-label">Prompt not arriving? Send manually</div>
+      <div class="mf-label">Prompt not arriving? Pay manually</div>
       <div class="mf-row">
         <span class="mf-icon">📲</span>
         <span class="mf-text">
-          Go to <strong>M-Pesa → Send Money</strong><br/>
-          Send to <strong>0724 862 896</strong>
+          Go to <strong>M-Pesa → Lipa na M-Pesa → Buy Goods</strong><br/>
+          Till Number: <strong>5961013</strong>
         </span>
       </div>
       <div class="mf-divider"></div>
@@ -648,16 +648,14 @@ widely available microcontroller hardware.
       if (data.success) {
         fb.className = 'feedback info';
         fb.textContent = '📱 Check your phone and enter your M-Pesa PIN to complete the donation.';
-        // Redirect to thank you page after user has time to read the message
-        setTimeout(() => { window.location.href = '/thankyou'; }, 4000);
       } else {
         fb.className = 'feedback error';
         fb.textContent = (data.error || 'Something went wrong. Please try again.')
-          + ' You can also send directly via M-Pesa Send Money to 0724 862 896.';
+          + ' You can also pay via M-Pesa Buy Goods, Till 5961013.';
       }
     } catch {
       fb.className = 'feedback error';
-      fb.textContent = 'Could not reach the server. Please send directly via M-Pesa Send Money to 0724 862 896.';
+      fb.textContent = 'Could not reach the server. Please pay via M-Pesa Buy Goods, Till 5961013.';
     } finally {
       btn.disabled = false;
       spinner.style.display = 'none';
